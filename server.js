@@ -10,37 +10,58 @@ app.use(express.static('public'));
 
 
 app.get('/api/quotes/random', (req, res, next) => {
-    const randomQuote = getRandomElement(quotes)
-    res.send({ quote: randomQuote })
-})
+    const randomQuote = getRandomElement(quotes);
+    res.send({ quote: randomQuote });
+});
 
  let allQuotes = () => {
-    const all = []
+    const all = [];
     for (let quote of quotes){
-        all.push(quote)
-    } return all
- }
+        all.push(quote);
+    } return all;
+ };
     
 
 
 app.get('/api/quotes', (req, res, next) => {
-    const name = req.query.person
-    const personQuotes = []
+    const name = req.query.person;
+    const personQuotes = [];
     const indexPerson = quotes.findIndex(x => x.person === name)
     if (name) {
         if (indexPerson !== -1) {
             for (let object of quotes) {
                 if (object.person === name) {
-                    personQuotes.push(object)
+                    personQuotes.push(object);
                 }
-            } res.send({ quotes: personQuotes })
-        } else res.status(404).send()
+            } res.send({ quotes: personQuotes });
+        } else res.status(404).send();
     } else {
-        res.send({ quotes: allQuotes() })
+        res.send({ quotes: allQuotes() });
     }
-})
+});
+
+
+app.post('/api/quotes', (req, res, next) => {
+    const newName = req.query.person;
+    const newQuote = req.query.quote;
+    const object = {
+        quote: newQuote,
+        person: newName
+    }
+    if (newName && newQuote) {
+        quotes.push(object);
+        res.send({ quote: object })
+    } else {
+        res.status(400).send();
+    }
+});
+
+
+
+
+
 
 app.listen(PORT, () => {
-    console.log('server is working')
-    })
+    console.log('server is working');
+    });
     
